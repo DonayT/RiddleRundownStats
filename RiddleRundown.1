@@ -35,7 +35,7 @@ create table PositionPlayers(
 	errors INTEGER
 	
 	primary key(num),
-	foreign key(teamName,location) references Team(teamName,location)
+	constraint team-w-PosPlayer foreign key(teamName,location) references Team(teamName,location)
 );
 
 create table Pitchers(
@@ -61,7 +61,7 @@ create table Pitchers(
 	battersFaced INTEGER
 	
 	primary key(num),
-	foreign key(teamName,location) references Team(teamName,location)
+	constraint team-w-Pitcher foreign key(teamName,location) references Team(teamName,location)
 );
 
 
