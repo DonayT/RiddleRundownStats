@@ -7,8 +7,8 @@ CREATE DATABASE IF NOT EXISTS riddlerundown;
 use riddlerundown;
 -- ------------------------------------------------
 create table Team(
-	teamName VARCHAR[20],
-	location VARCHAR[40],
+	teamName VARCHAR(20),
+	location VARCHAR(40),
 	wins INTEGER,
 	losses INTEGER,
 	
@@ -16,11 +16,11 @@ create table Team(
 );
 
 create table PositionPlayers(
-	teamName CHAR[20],  
-	location CHAR[20],  
-	name CHAR[30],  
+	teamName VARCHAR(20),  
+	location VARCHAR(20),  
+	name VARCHAR(30),  
 	num INTEGER, 
-	pos CHAR[10],  
+	pos VARCHAR(20),  
 	games INTEGER,
 	plateAppearances INTEGER,  
 	AtBats INTEGER, 
@@ -32,16 +32,16 @@ create table PositionPlayers(
 	rbis INTEGER,  
 	walks INTEGER,
 	strikeouts INTEGER,
-	errors INTEGER
+	errors INTEGER,
 	
 	primary key(num),
-	constraint team-w-PosPlayer foreign key(teamName,location) references Team(teamName,location)
+	foreign key(teamName,location) references Team(teamName,location)
 );
 
 create table Pitchers(
-	teamName CHAR[20],  
-	location CHAR[20],  
-	name CHAR[30],  
+	teamName VARCHAR(20),  
+	location VARCHAR(20),  
+	name VARCHAR(30),  
 	num INTEGER, 
 	wins INTEGER,
 	losses INTEGER,
@@ -52,16 +52,16 @@ create table Pitchers(
 	shutouts INTEGER,  
 	saves INTEGER,  
 	runs INTEGER,  
-	earned runs INTEGER,  
+	earnedRuns INTEGER,  
 	hits INTEGER,  
 	homeruns INTEGER,  
 	walks INTEGER,  
 	hitByPitches INTEGER,  
 	strikeouts INTEGER,  
-	battersFaced INTEGER
+	battersFaced INTEGER,
 	
 	primary key(num),
-	constraint team-w-Pitcher foreign key(teamName,location) references Team(teamName,location)
+	foreign key(teamName,location) references Team(teamName,location)
 );
 
 
@@ -84,6 +84,16 @@ insert into Pitchers values
 	('Mets','New York','Edwin Diaz',39,3,1,61,0,62.0,0,0,32,9,9,34,3,18,2,118,235),
 	('Giants','San Fransisco','Logan Webb',62,15,9,32,32,192.1,0,0,0,76,62,174,11,49,7,163,787),
 	('Mariners','Seattle','Luis Castillo',58,8,6,25,25,150.1,0,0,0,56,50,118,13,45,8,167,615);
-	
+
+-- ------------------------------------------------
+-- Table select statements
+
+select * from team;
+select * from positionplayers;
+select * from pitchers;
+
+-- ------------------------------------------------
+
+
 
 
