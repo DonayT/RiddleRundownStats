@@ -211,16 +211,67 @@ public class DatabaseHelper {
         }
     }
 
-    // Update position players
+    // Update position player
     public void updatePositionPlayers(String teamName, String teamLocation, int num, int games, int plateAppearances,
             int AtBats, int Runs, int Hits, int doubles, int triples, int HR, int rbis, int walks, int strikeouts,
             int errors) {
         try {
-            String updatePositionPlayersString = "UPDATE positionPlayers SET games = ?, plateAppearances = ?, AtBats = ?, Runs = ?, Hits = ?, 2b = ?, 3b = ?, HR = ?, rbis = ?, walks = ?, strikeouts = ?, errors = ? WHERE teamname=? AND location=? AND num=?;";
+            String updatePositionPlayersString = "UPDATE positionPlayers SET games = ?, plateAppearances = ?, AtBats = ?, Runs = ?, Hits = ?, 2b = ?, 3b = ?, HR = ?, rbis = ?, walks = ?, strikeouts = ?, errors = ? WHERE teamname=? AND location=? AND num=?";
 
             PreparedStatement updatePositionPlayersPreparedStatement = sql
                     .prepareStatement(updatePositionPlayersString);
+            updatePositionPlayersPreparedStatement.setInt(1, games);
+            updatePositionPlayersPreparedStatement.setInt(2, plateAppearances);
+            updatePositionPlayersPreparedStatement.setInt(3, AtBats);
+            updatePositionPlayersPreparedStatement.setInt(4, Runs);
+            updatePositionPlayersPreparedStatement.setInt(5, Hits);
+            updatePositionPlayersPreparedStatement.setInt(6, doubles);
+            updatePositionPlayersPreparedStatement.setInt(7, triples);
+            updatePositionPlayersPreparedStatement.setInt(8, HR);
+            updatePositionPlayersPreparedStatement.setInt(9, rbis);
+            updatePositionPlayersPreparedStatement.setInt(10, walks);
+            updatePositionPlayersPreparedStatement.setInt(11, strikeouts);
+            updatePositionPlayersPreparedStatement.setInt(12, errors);
+            updatePositionPlayersPreparedStatement.setString(13, teamName);
+            updatePositionPlayersPreparedStatement.setString(14, teamLocation);
+            updatePositionPlayersPreparedStatement.setInt(15, num);
 
+            updatePositionPlayersPreparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Update pitcher
+    public void updatePitchers(String teamName, String teamLocation, int num, int wins, int losses, int games,
+            int gamesStarted, int inningsPitched, int completeGames, int shutouts, int saves, int runs, int earnedRuns,
+            int hits, int homeruns, int walks, int hitByPitches, int strikeouts, int battersFaced) {
+        try {
+            String updatePitchersString = "UPDATE pitchers SET wins = ?, losses = ?, games = ?, gamesStarted = ?, inningsPitched = ?, completeGames = ?, shutouts = ?, saves = ?, runs = ?, earnedRuns = ?, hits = ?, homeruns = ?, walks = ?, hitByPitches = ?, strikeouts = ?, battersFaced = ? WHERE teamname=?' AND location=? AND num=?";
+
+            PreparedStatement updatePitchersPreparedStatement = sql.prepareStatement(updatePitchersString);
+
+            updatePitchersPreparedStatement.setInt(1, wins);
+            updatePitchersPreparedStatement.setInt(2, losses);
+            updatePitchersPreparedStatement.setInt(3, games);
+            updatePitchersPreparedStatement.setInt(4, gamesStarted);
+            updatePitchersPreparedStatement.setInt(5, inningsPitched);
+            updatePitchersPreparedStatement.setInt(6, completeGames);
+            updatePitchersPreparedStatement.setInt(7, shutouts);
+            updatePitchersPreparedStatement.setInt(8, saves);
+            updatePitchersPreparedStatement.setInt(9, runs);
+            updatePitchersPreparedStatement.setInt(10, earnedRuns);
+            updatePitchersPreparedStatement.setInt(11, hits);
+            updatePitchersPreparedStatement.setInt(12, homeruns);
+            updatePitchersPreparedStatement.setInt(13, walks);
+            updatePitchersPreparedStatement.setInt(14, hitByPitches);
+            updatePitchersPreparedStatement.setInt(15, strikeouts);
+            updatePitchersPreparedStatement.setInt(16, battersFaced);
+            updatePitchersPreparedStatement.setString(17, teamName);
+            updatePitchersPreparedStatement.setString(18, teamLocation);
+            updatePitchersPreparedStatement.setInt(19, num);
+
+            updatePitchersPreparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
