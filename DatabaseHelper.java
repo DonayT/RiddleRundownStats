@@ -15,7 +15,7 @@ public class DatabaseHelper {
     // Insert team
     public void addTeam(String teamName, String teamLocation) {
         try {
-            String insertString = "INSERT INTO Team VALUES (?, ?)";
+            String insertString = "INSERT INTO Team VALUES (?, ?, 0, 0)";
 
             PreparedStatement insertStatement = sql.prepareStatement(insertString);
             insertStatement.setString(1, teamName);
