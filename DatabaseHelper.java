@@ -35,7 +35,7 @@ public class DatabaseHelper {
     // Insert position player
     public void addPositionPlayer(String teamName, String teamLocation, String name, int num, String pos) {
         try {
-            String insertString = "INSERT INTO PositionPlayers VALUES (?, ?, ?, ?, ?)";
+            String insertString = "INSERT INTO PositionPlayers VALUES (?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
 
             PreparedStatement insertStatement = sql.prepareStatement(insertString);
             insertStatement.setString(1, teamName);

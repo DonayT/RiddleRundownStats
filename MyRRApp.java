@@ -95,29 +95,34 @@ public class MyRRApp {
         createPlayerPage.setLayout(new BoxLayout(createPlayerPage, BoxLayout.PAGE_AXIS));
 
         JLabel PPdirections = new JLabel(
-                "To create a new position player: select a team, enter a name, number, and position");
+                "To create a new position player: select a team, enter a name, number, and position. To delete enter team name, location, and number.");
         JLabel PPsuccessMessage = new JLabel("Success!");
         PPsuccessMessage.setVisible(false);
         PPsuccessMessage.setForeground(Color.GREEN);
         JLabel PPfailureMessage = new JLabel("Failed to update database.");
         PPfailureMessage.setVisible(false);
         PPfailureMessage.setForeground(Color.red);
-        String[] choices = { "Yo", "Bro" };
-        JComboBox<String> teamNamesBox = new JComboBox<String>(choices);
+        JTextField PPUpTeamName = new JTextField("Enter team name", 20);
+        JTextField PPUpTeamLocation = new JTextField("Enter team location", 20);
         JTextField ppName = new JTextField("Enter a name", 20);
         JTextField ppNum = new JTextField("Enter a number", 20);
         JTextField ppPosition = new JTextField("Enter a position", 20);
         JButton PPcreateButton = new JButton("Create Player", null);
         PPcreateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String teamNameString = PPUpTeamName.getText();
+                String teamLocationString = PPUpTeamLocation.getText();
                 String nameString = ppName.getText();
-                String numberInteger = ppNum.getText();
+                Integer numberInteger = Integer.parseInt(ppNum.getText());
                 String positionString = ppPosition.getText();
                 System.out.print(nameString + numberInteger + positionString);
+                sql.addPositionPlayer(teamNameString, teamLocationString, nameString, numberInteger, positionString);
                 PPsuccessMessage.setVisible(true);
                 ppName.setText("Enter a name");
                 ppNum.setText("Enter a number");
                 ppPosition.setText("Enter a position");
+                PPUpTeamName.setText("Enter team name");
+                PPUpTeamLocation.setText("Enter team location");
             }
         });
         JButton PPdeleteButton = new JButton("Delete Player", null);
@@ -130,15 +135,22 @@ public class MyRRApp {
         });
         PPconfirmDeleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String nameString = ppName.getText();
-                String numberInteger = ppNum.getText();
-                System.out.print(nameString + numberInteger);
-                PPfailureMessage.setVisible(true);
+                String teamNameString = PPUpTeamName.getText();
+                String teamLocationString = PPUpTeamLocation.getText();
+                Integer numberInteger = Integer.parseInt(ppNum.getText());
+                sql.deletePositionPlayers(teamNameString, teamLocationString, numberInteger);
+                PPsuccessMessage.setVisible(true);
+                ppName.setText("Enter a name");
+                ppNum.setText("Enter a number");
+                ppPosition.setText("Enter a position");
+                PPUpTeamName.setText("Enter team name");
+                PPUpTeamLocation.setText("Enter team location");
             }
         });
 
         createPlayerPage.add(PPdirections);
-        createPlayerPage.add(teamNamesBox);
+        createPlayerPage.add(PPUpTeamName);
+        createPlayerPage.add(PPUpTeamLocation);
         createPlayerPage.add(ppName);
         createPlayerPage.add(ppNum);
         createPlayerPage.add(ppPosition);
@@ -173,7 +185,7 @@ public class MyRRApp {
                 Integer numberInteger = Integer.parseInt(pNum.getText());
                 System.out.print(nameString + numberInteger);
                 sql.addPitcher(teamNameString, teamLocationString, nameString, numberInteger);
-                PPsuccessMessage.setVisible(true);
+                PsuccessMessage.setVisible(true);
                 pName.setText("Enter a name");
                 pNum.setText("Enter a number");
                 PUpTeamName.setText("Enter team name");
@@ -293,8 +305,8 @@ public class MyRRApp {
         Dimension sz = Toolkit.getDefaultToolkit().getScreenSize();
         int wHeight = sz.height * (1);
         int wWidth = sz.width * (1);
-        wHeight = wHeight / 4;
-        wWidth = wWidth / 4;
+        wHeight = wHeight / 3;
+        wWidth = wWidth / 3;
         System.out.println("Screen size: " + sz.width + " x " + sz.height);
         System.out.println("Screen size: " + wHeight + " x " + wWidth);
 
