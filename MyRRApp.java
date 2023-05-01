@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class MyRRApp {
     final static int extraWindowWidth = 100;
 
+    // Connection to database, set up for tyler's pc
     String url = "jdbc:mysql://localhost:3306/riddlerundown?useSSL=false";
     String user = "root";
     String pswd = "script47";
@@ -23,6 +24,19 @@ public class MyRRApp {
 
         // Card 3, view team statistics page
         JPanel viewTeamStatPage = new JPanel();
+        viewTeamStatPage.setLayout(new BoxLayout(viewTeamStatPage, BoxLayout.PAGE_AXIS));
+        JButton printerButton = new JButton("Print", null);
+        printerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                sql.printTeams();
+            }
+        });
+        JComboBox<String> teamNameBox = sql.comboBoxTeamNames();
+        JComboBox<String> teamLocationBox = sql.comboBoxTeamLocations();
+
+        viewTeamStatPage.add(teamNameBox);
+        viewTeamStatPage.add(teamLocationBox);
+        viewTeamStatPage.add(printerButton);
 
         // Card 4, create team
         JPanel createTeamPage = new JPanel();
@@ -88,6 +102,8 @@ public class MyRRApp {
         JLabel PPfailureMessage = new JLabel("Failed to update database.");
         PPfailureMessage.setVisible(false);
         PPfailureMessage.setForeground(Color.red);
+        String[] choices = { "Yo", "Bro" };
+        JComboBox<String> teamNamesBox = new JComboBox<String>(choices);
         JTextField ppName = new JTextField("Enter a name", 20);
         JTextField ppNum = new JTextField("Enter a number", 20);
         JTextField ppPosition = new JTextField("Enter a position", 20);
@@ -98,7 +114,10 @@ public class MyRRApp {
                 String numberInteger = ppNum.getText();
                 String positionString = ppPosition.getText();
                 System.out.print(nameString + numberInteger + positionString);
-                PPfailureMessage.setVisible(true);
+                PPsuccessMessage.setVisible(true);
+                ppName.setText("Enter a name");
+                ppNum.setText("Enter a number");
+                ppPosition.setText("Enter a position");
             }
         });
         JButton PPdeleteButton = new JButton("Delete Player", null);
@@ -119,6 +138,7 @@ public class MyRRApp {
         });
 
         createPlayerPage.add(PPdirections);
+        createPlayerPage.add(teamNamesBox);
         createPlayerPage.add(ppName);
         createPlayerPage.add(ppNum);
         createPlayerPage.add(ppPosition);
@@ -140,15 +160,24 @@ public class MyRRApp {
         JLabel PfailureMessage = new JLabel("Failed to update database.");
         PfailureMessage.setVisible(false);
         PfailureMessage.setForeground(Color.red);
+        JTextField PUpTeamName = new JTextField("Enter team name", 20);
+        JTextField PUpTeamLocation = new JTextField("Enter team location", 20);
         JTextField pName = new JTextField("Enter a name", 20);
         JTextField pNum = new JTextField("Enter a number", 20);
         JButton PcreateButton = new JButton("Create Pitcher", null);
         PcreateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String teamNameString = PUpTeamName.getText();
+                String teamLocationString = PUpTeamLocation.getText();
                 String nameString = pName.getText();
-                String numberInteger = pNum.getText();
+                Integer numberInteger = Integer.parseInt(pNum.getText());
                 System.out.print(nameString + numberInteger);
-                PfailureMessage.setVisible(true);
+                sql.addPitcher(teamNameString, teamLocationString, nameString, numberInteger);
+                PPsuccessMessage.setVisible(true);
+                pName.setText("Enter a name");
+                pNum.setText("Enter a number");
+                PUpTeamName.setText("Enter team name");
+                PUpTeamLocation.setText("Enter team location");
             }
         });
         JButton PdeleteButton = new JButton("Delete Pitcher", null);
@@ -161,14 +190,23 @@ public class MyRRApp {
         });
         PconfirmDeleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String teamNameString = PUpTeamName.getText();
+                String teamLocationString = PUpTeamLocation.getText();
                 String nameString = pName.getText();
-                String numberInteger = pNum.getText();
+                Integer numberInteger = Integer.parseInt(pNum.getText());
                 System.out.print(nameString + numberInteger);
-                PfailureMessage.setVisible(true);
+                sql.deletePitchers(teamNameString, teamLocationString, numberInteger);
+                PsuccessMessage.setVisible(true);
+                pName.setText("Enter a name");
+                pNum.setText("Enter a number");
+                PUpTeamName.setText("Enter team name");
+                PUpTeamLocation.setText("Enter team location");
             }
         });
 
         createPitcherPage.add(Pdirections);
+        createPitcherPage.add(PUpTeamName);
+        createPitcherPage.add(PUpTeamLocation);
         createPitcherPage.add(pName);
         createPitcherPage.add(pNum);
         createPitcherPage.add(PcreateButton);
@@ -181,6 +219,41 @@ public class MyRRApp {
         JPanel updateTeam = new JPanel();
         updateTeam.setLayout(new BoxLayout(updateTeam, BoxLayout.PAGE_AXIS));
 
+        JLabel TupDirections = new JLabel("To create a new team, enter a team name and location.");
+        JLabel TupSuccessMessage = new JLabel("Success!");
+        TupSuccessMessage.setVisible(false);
+        TupSuccessMessage.setForeground(Color.GREEN);
+        JLabel TupFailureMessage = new JLabel("Failed to update database.");
+        TupFailureMessage.setVisible(false);
+        TupFailureMessage.setForeground(Color.red);
+        JTextField UpTeamName = new JTextField("Enter team name", 20);
+        JTextField UpTeamLocation = new JTextField("Enter team location", 20);
+        JTextField UpTeamWins = new JTextField("Insert number of wins");
+        JTextField UpTeamLosses = new JTextField("Insert number of losses");
+        JButton TupdateButton = new JButton("Update team", null);
+        TupdateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String teamNameString = UpTeamName.getText();
+                String teamLocationString = UpTeamLocation.getText();
+                Integer teamWins = Integer.parseInt(UpTeamWins.getText());
+                Integer teamLosses = Integer.parseInt(UpTeamLosses.getText());
+                System.out.printf("%s %s", teamNameString, teamLocationString);
+                sql.updateTeams(teamNameString, teamLocationString, teamWins, teamLosses);
+                TupFailureMessage.setVisible(true);
+                UpTeamName.setText("Enter team name.");
+                UpTeamLocation.setText("Enter team location.");
+            }
+        });
+
+        updateTeam.add(TupDirections);
+        updateTeam.add(UpTeamName);
+        updateTeam.add(UpTeamLocation);
+        updateTeam.add(UpTeamWins);
+        updateTeam.add(UpTeamLosses);
+        updateTeam.add(TupdateButton);
+        updateTeam.add(TupSuccessMessage);
+        updateTeam.add(TupFailureMessage);
+
         // Card 8, Update team
         JPanel updatePlayer = new JPanel();
         updatePlayer.setLayout(new BoxLayout(updatePlayer, BoxLayout.PAGE_AXIS));
@@ -190,9 +263,9 @@ public class MyRRApp {
         updatePitcher.setLayout(new BoxLayout(updatePitcher, BoxLayout.PAGE_AXIS));
 
         // Add tabs to tabbed pane
+        tabbedPane.addTab("View Team Stats", viewTeamStatPage);
         tabbedPane.addTab("View Player Stats", viewPlayerStatPage);
         tabbedPane.addTab("View Pitcher Stats", viewPitcherStatPage);
-        tabbedPane.addTab("View Team Stats", viewTeamStatPage);
         tabbedPane.addTab("New Team", createTeamPage);
         tabbedPane.addTab("New Position Player", createPlayerPage);
         tabbedPane.addTab("New Pitcher", createPitcherPage);

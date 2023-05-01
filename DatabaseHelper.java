@@ -1,5 +1,7 @@
 import java.sql.*;
 
+import javax.swing.JComboBox;
+
 public class DatabaseHelper {
 
     Connection sql;
@@ -54,7 +56,7 @@ public class DatabaseHelper {
     // Insert pitcher
     public void addPitcher(String teamName, String teamLocation, String name, int num) {
         try {
-            String insertString = "INSERT INTO Pitchers VALUES (?, ?, ?, ?)";
+            String insertString = "INSERT INTO Pitchers VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
 
             PreparedStatement insertStatement = sql.prepareStatement(insertString);
             insertStatement.setString(1, teamName);
@@ -125,7 +127,7 @@ public class DatabaseHelper {
     }
 
     public void deletePositionPlayers(String teamName, String teamLocation, int num) {
-        String deletePositionPlayersString = "DELETE FROM PositionPlayers where teamName = ? AND location = ? AND num - ?";
+        String deletePositionPlayersString = "DELETE FROM PositionPlayers where teamName = ? AND location = ? AND num = ?";
 
         PreparedStatement deletePositionPlayersStmt;
 
@@ -160,7 +162,7 @@ public class DatabaseHelper {
     }
 
     public void deletePitchers(String teamName, String teamLocation, int num) {
-        String deletePitchersString = "DELETE FROM Pitchers where teamName = ? AND location = ? AND num - ?";
+        String deletePitchersString = "DELETE FROM Pitchers where teamName = ? AND location = ? AND num = ?";
 
         PreparedStatement deletePitchersStmt;
 
@@ -197,7 +199,7 @@ public class DatabaseHelper {
     // Update team
     public void updateTeams(String teamName, String teamLocation, int wins, int losses) {
         try {
-            String updateTeamsString = "UPDATE teams SET wins = ?, losses = ? WHERE teamname=? AND location=?";
+            String updateTeamsString = "UPDATE team SET wins = ?, losses = ? WHERE teamname=? AND location=?";
 
             PreparedStatement updateTeamsPreparedStatement = sql.prepareStatement(updateTeamsString);
             updateTeamsPreparedStatement.setInt(1, wins);
@@ -275,6 +277,63 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    // Print teams
+    public void printTeams() {
+        try {
+            String query = "SELECT * FROM team";
+            Statement stmt = sql.createStatement();
+            ResultSet results = stmt.executeQuery(query);
+
+            while (results.next()) {
+                System.out.printf("%s, %s, %d, %d\n",
+                        results.getString("teamName"),
+                        results.getString("location"),
+                        results.getInt("wins"),
+                        results.getInt("losses"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); // Handle exceptions
+        }
+    }
+
+    // Combo box of team names
+    public JComboBox<String> comboBoxTeamNames() {
+        JComboBox<String> box = new JComboBox<String>();
+        try {
+            String query = "SELECT teamName FROM team";
+            Statement stmt = sql.createStatement();
+            ResultSet results = stmt.executeQuery(query);
+
+            while (results.next()) {
+                String name = results.getString("teamName");
+                box.addItem(name);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); // Handle exceptions
+        }
+        return box;
+    }
+
+    // Combo box of team names
+    public JComboBox<String> comboBoxTeamLocations() {
+        JComboBox<String> box = new JComboBox<String>();
+        try {
+            String query = "SELECT location FROM team";
+            Statement stmt = sql.createStatement();
+            ResultSet results = stmt.executeQuery(query);
+
+            while (results.next()) {
+                String name = results.getString("location");
+                box.addItem(name);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); // Handle exceptions
+        }
+        return box;
     }
 
 }
